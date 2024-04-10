@@ -46,9 +46,9 @@ class PlayerTracker:
     def draw_bboxes(self,video_frames, player_detections):
         output_video_frames = []
         color = {
-            "player": (0, 0, 255),
-            "goalkeeper": (128,0,0),
-            "referee" :(0,100,0),
+            "player": (0, 255, 0), #Xanh cây
+            "goalkeeper": (0,0,255), # Xanh nước biển
+            "referee" :(255,0,255), # Hồng
         }
         for frame, player_dict in zip(video_frames, player_detections):
             # Draw Bounding Boxes
@@ -56,14 +56,14 @@ class PlayerTracker:
                 name = info["cls"]
                 x1, y1, x2, y2 = info["box"]
                 if(name == "player"):
-                    cv2.putText(frame, f"{name}: {track_id}",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, color[name], 2)
-                    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color[name], 2)
+                    cv2.putText(frame, f"{name}: {track_id}",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, color[name], 1)
+                    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color[name], 1)
                 elif( name == "goalkeeper"):
-                    cv2.putText(frame, f"{name}: {track_id}",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, color[name], 2)
-                    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color[name], 2)
+                    cv2.putText(frame, f"{name}: {track_id}",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, color[name], 1)
+                    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color[name], 1)
                 elif( name == "referee"):
-                    cv2.putText(frame, f"{name}: {track_id}",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, color[name], 2)
-                    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color[name], 2)
+                    cv2.putText(frame, f"{name}: {track_id}",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, color[name], 1)
+                    cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color[name], 1)
 
             output_video_frames.append(frame)
         

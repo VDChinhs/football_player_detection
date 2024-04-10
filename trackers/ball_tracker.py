@@ -89,10 +89,11 @@ class BallTracker:
         output_video_frames = []
         for frame, ball_dict in zip(video_frames, player_detections):
             # Draw Bounding Boxes
+            # Vàng
             for track_id, bbox in ball_dict.items():
                 x1, y1, x2, y2 = bbox
-                cv2.putText(frame, f"Ball ID: {track_id}",(int(bbox[0]),int(bbox[1] -10 )),cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 255), 2)
-                cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 255), 2)
+                cv2.putText(frame, f"Ball",(int(x1),int(y1 - 10)),cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 255), 1)
+                cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 255), 1)
             output_video_frames.append(frame)
         
         return output_video_frames
