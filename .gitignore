@@ -1,2 +1,3 @@
-./run
-./output_videos
+runs/
+output_videos/
+__pycache__/
