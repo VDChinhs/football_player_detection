@@ -3,6 +3,7 @@ import cv2
 import pickle
 import sys
 from utils import get_center_of_bbox
+import os
 sys.path.append('../')
 
 class YardTracker:
@@ -12,7 +13,7 @@ class YardTracker:
     def detect_frames(self,frames, read_from_stub=False, stub_path=None):
         yard_detections = []
 
-        if read_from_stub and stub_path is not None:
+        if read_from_stub and stub_path is not None and os.path.exists(stub_path):
             with open(stub_path, 'rb') as f:
                 yard_detections = pickle.load(f)
             return yard_detections
