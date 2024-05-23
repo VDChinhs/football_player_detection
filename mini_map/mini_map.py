@@ -44,153 +44,153 @@ class MiniMap:
         drawing_key_points[2], drawing_key_points[3] = int(self.court_end_x), int(
             self.court_start_y
         )
-        # point 2
-        drawing_key_points[4] = int(self.court_start_x)
-        drawing_key_points[5] = self.court_start_y + self.convert_meters_to_pixels(
+        # point 16
+        drawing_key_points[32] = int(self.court_start_x)
+        drawing_key_points[33] = self.court_start_y + self.convert_meters_to_pixels(
             constants.NUA_SAN_DAI * 2
         )
-        # point 3
-        drawing_key_points[6] = drawing_key_points[0] + self.court_drawing_width
-        drawing_key_points[7] = drawing_key_points[5]
-        # #point 4
-        drawing_key_points[8] = drawing_key_points[0] + self.convert_meters_to_pixels(
+        # point 17
+        drawing_key_points[34] = drawing_key_points[0] + self.court_drawing_width
+        drawing_key_points[35] = drawing_key_points[33]
+        # point 9
+        drawing_key_points[18] = drawing_key_points[0] + self.convert_meters_to_pixels(
             constants.GOC_CAM
-        )
-        drawing_key_points[9] = drawing_key_points[1]
-        # #point 5
-        drawing_key_points[10] = drawing_key_points[2] - self.convert_meters_to_pixels(
-            constants.GOC_CAM
-        )
-        drawing_key_points[11] = drawing_key_points[3]
-        # #point 6
-        drawing_key_points[12] = drawing_key_points[4] + self.convert_meters_to_pixels(
-            constants.GOC_CAM
-        )
-        drawing_key_points[13] = drawing_key_points[5]
-        # #point 7
-        drawing_key_points[14] = drawing_key_points[6] - self.convert_meters_to_pixels(
-            constants.GOC_CAM
-        )
-        drawing_key_points[15] = drawing_key_points[7]
-        # #point 8
-        drawing_key_points[16] = drawing_key_points[8] + self.convert_meters_to_pixels(
-            constants.CAM_GOAL
-        )
-        drawing_key_points[17] = drawing_key_points[1]
-        # # #point 9
-        drawing_key_points[18] = drawing_key_points[10] - self.convert_meters_to_pixels(
-            constants.CAM_GOAL
         )
         drawing_key_points[19] = drawing_key_points[1]
-        # #point 10
-        drawing_key_points[20] = drawing_key_points[12] + self.convert_meters_to_pixels(
+        # point 8
+        drawing_key_points[16] = drawing_key_points[2] - self.convert_meters_to_pixels(
+            constants.GOC_CAM
+        )
+        drawing_key_points[17] = drawing_key_points[3]
+        # point 25
+        drawing_key_points[50] = drawing_key_points[32] + self.convert_meters_to_pixels(
+            constants.GOC_CAM
+        )
+        drawing_key_points[51] = drawing_key_points[33]
+        # point 24
+        drawing_key_points[48] = drawing_key_points[34] - self.convert_meters_to_pixels(
+            constants.GOC_CAM
+        )
+        drawing_key_points[49] = drawing_key_points[35]
+        # point 5
+        drawing_key_points[10] = drawing_key_points[18] + self.convert_meters_to_pixels(
             constants.CAM_GOAL
         )
-        drawing_key_points[21] = drawing_key_points[5]
-        # # #point 11
-        drawing_key_points[22] = drawing_key_points[14] - self.convert_meters_to_pixels(
+        drawing_key_points[11] = drawing_key_points[1]
+        # point 4
+        drawing_key_points[8] = drawing_key_points[16] - self.convert_meters_to_pixels(
             constants.CAM_GOAL
         )
-        drawing_key_points[23] = drawing_key_points[5]
-        # # #point 12
-        drawing_key_points[24] = drawing_key_points[8]
-        drawing_key_points[25] = drawing_key_points[9] + self.convert_meters_to_pixels(
+        drawing_key_points[9] = drawing_key_points[1]
+        # point 21
+        drawing_key_points[42] = drawing_key_points[50] + self.convert_meters_to_pixels(
+            constants.CAM_GOAL
+        )
+        drawing_key_points[43] = drawing_key_points[33]
+        # point 20
+        drawing_key_points[40] = drawing_key_points[48] - self.convert_meters_to_pixels(
+            constants.CAM_GOAL
+        )
+        drawing_key_points[41] = drawing_key_points[33]
+        # point 7
+        drawing_key_points[14] = drawing_key_points[18]
+        drawing_key_points[15] = drawing_key_points[19] + self.convert_meters_to_pixels(
             constants.CAM_DAI
         )
-        # # #point 13
-        drawing_key_points[26] = drawing_key_points[10]
-        drawing_key_points[27] = drawing_key_points[11] + self.convert_meters_to_pixels(
+        # point 6
+        drawing_key_points[12] = drawing_key_points[16]
+        drawing_key_points[13] = drawing_key_points[17] + self.convert_meters_to_pixels(
             constants.CAM_DAI
         )
-        # # #point 14
-        drawing_key_points[28] = drawing_key_points[8]
-        drawing_key_points[29] = drawing_key_points[13] - self.convert_meters_to_pixels(
+        # point 23
+        drawing_key_points[46] = drawing_key_points[50]
+        drawing_key_points[47] = drawing_key_points[51] - self.convert_meters_to_pixels(
             constants.CAM_DAI
         )
-        # # #point 15
-        drawing_key_points[30] = drawing_key_points[10]
-        drawing_key_points[31] = drawing_key_points[15] - self.convert_meters_to_pixels(
+        # point 22
+        drawing_key_points[44] = drawing_key_points[48]
+        drawing_key_points[45] = drawing_key_points[49] - self.convert_meters_to_pixels(
             constants.CAM_DAI
         )
-        # # #point 16
-        drawing_key_points[32] = drawing_key_points[16]
-        drawing_key_points[33] = drawing_key_points[17] + self.convert_meters_to_pixels(
+        # point 3
+        drawing_key_points[6] = drawing_key_points[10]
+        drawing_key_points[7] = drawing_key_points[11] + self.convert_meters_to_pixels(
             constants.GOAL_DAI
         )
-        # # #point 17
-        drawing_key_points[34] = drawing_key_points[18]
-        drawing_key_points[35] = drawing_key_points[19] + self.convert_meters_to_pixels(
+        # point 2
+        drawing_key_points[4] = drawing_key_points[8]
+        drawing_key_points[5] = drawing_key_points[9] + self.convert_meters_to_pixels(
             constants.GOAL_DAI
         )
-        # # #point 18
-        drawing_key_points[36] = drawing_key_points[16]
-        drawing_key_points[37] = drawing_key_points[21] - self.convert_meters_to_pixels(
+        # point 19
+        drawing_key_points[38] = drawing_key_points[10]
+        drawing_key_points[39] = drawing_key_points[43] - self.convert_meters_to_pixels(
             constants.GOAL_DAI
         )
-        # # #point 19
-        drawing_key_points[38] = drawing_key_points[18]
-        drawing_key_points[39] = drawing_key_points[23] - self.convert_meters_to_pixels(
+        # point 18
+        drawing_key_points[36] = drawing_key_points[8]
+        drawing_key_points[37] = drawing_key_points[41] - self.convert_meters_to_pixels(
             constants.GOAL_DAI
         )
-        # # #point 20
-        drawing_key_points[40] = drawing_key_points[0]
-        drawing_key_points[41] = drawing_key_points[1] + self.convert_meters_to_pixels(
+        # point 15
+        drawing_key_points[30] = drawing_key_points[0]
+        drawing_key_points[31] = drawing_key_points[1] + self.convert_meters_to_pixels(
             constants.NUA_SAN_DAI
         )
-        # # #point 21
-        drawing_key_points[42] = drawing_key_points[2]
-        drawing_key_points[43] = drawing_key_points[3] + self.convert_meters_to_pixels(
+        # point 12
+        drawing_key_points[24] = drawing_key_points[2]
+        drawing_key_points[25] = drawing_key_points[3] + self.convert_meters_to_pixels(
             constants.NUA_SAN_DAI
         )
-        # # #point 22
-        drawing_key_points[44] = drawing_key_points[0] + self.convert_meters_to_pixels(
+        # point 14
+        drawing_key_points[28] = drawing_key_points[0] + self.convert_meters_to_pixels(
             constants.MID
         )
-        drawing_key_points[45] = drawing_key_points[41]
-        # # #point 23
-        drawing_key_points[46] = drawing_key_points[2] - self.convert_meters_to_pixels(
+        drawing_key_points[29] = drawing_key_points[31]
+        # point 13
+        drawing_key_points[26] = drawing_key_points[2] - self.convert_meters_to_pixels(
             constants.MID
         )
-        drawing_key_points[47] = drawing_key_points[41]
-        # # #point 24
-        drawing_key_points[48] = drawing_key_points[12] + self.convert_meters_to_pixels(
+        drawing_key_points[27] = drawing_key_points[31]
+        # point 11
+        drawing_key_points[22] = drawing_key_points[14] + self.convert_meters_to_pixels(
             constants.BAU_DUC
         )
-        drawing_key_points[49] = drawing_key_points[27]
-        # # #point 25
-        drawing_key_points[50] = drawing_key_points[26] - self.convert_meters_to_pixels(
+        drawing_key_points[23] = drawing_key_points[13]
+        # point 10
+        drawing_key_points[20] = drawing_key_points[12] - self.convert_meters_to_pixels(
             constants.BAU_DUC
         )
-        drawing_key_points[51] = drawing_key_points[27]
-        # # #point 26
-        drawing_key_points[52] = drawing_key_points[48]
-        drawing_key_points[53] = drawing_key_points[29]
-        # # #point 27
-        drawing_key_points[54] = drawing_key_points[50]
-        drawing_key_points[55] = drawing_key_points[29]
+        drawing_key_points[21] = drawing_key_points[13]
+        # point 27
+        drawing_key_points[54] = drawing_key_points[22]
+        drawing_key_points[55] = drawing_key_points[47]
+        # point 26
+        drawing_key_points[52] = drawing_key_points[20]
+        drawing_key_points[53] = drawing_key_points[45]
 
         self.drawing_key_points = drawing_key_points
 
     def set_court_lines(self):
         self.lines = [
             # dọc
-            (0, 2),
-            (1, 3),
-            (8, 16),
-            (9, 17),
-            (10, 18),
-            (11, 19),
-            (4, 12),
-            (5, 13),
-            (6, 14),
-            (7, 15),
+            (0, 16),
+            (1, 17),
+            (5, 3),
+            (4, 2),
+            (21, 19),
+            (20, 18),
+            (9, 7),
+            (8, 6),
+            (25, 23),
+            (24, 22),
             # ngang
             (0, 1),
-            (2, 3),
-            (12, 13),
-            (14, 15),
             (16, 17),
-            (18, 19),
+            (7, 6),
+            (23, 22),
+            (3, 2),
+            (19, 18),
         ]
 
     def set_mini_map_position(self):
@@ -228,11 +228,11 @@ class MiniMap:
         # Draw net
         net_start_point = (
             self.drawing_key_points[0],
-            int((self.drawing_key_points[1] + self.drawing_key_points[5]) / 2),
+            int((self.drawing_key_points[1] + self.drawing_key_points[33]) / 2),
         )
         net_end_point = (
             self.drawing_key_points[2],
-            int((self.drawing_key_points[1] + self.drawing_key_points[5]) / 2),
+            int((self.drawing_key_points[1] + self.drawing_key_points[33]) / 2),
         )
         cv2.line(frame, net_start_point, net_end_point, (255, 0, 0), 2)
 
@@ -329,11 +329,44 @@ class MiniMap:
 
                 # Get The closest keypoint in pixels
                 closest_key_point_index = get_closest_keypoint_index(
-                    foot_position, original_court_key_points, [22, 23, 24, 25]
+                    foot_position,
+                    original_court_key_points[frame_num],
+                    [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25,
+                        26,
+                        27,
+                    ],
                 )
                 closest_key_point = (
-                    original_court_key_points[closest_key_point_index * 2],
-                    original_court_key_points[closest_key_point_index * 2 + 1],
+                    original_court_key_points[frame_num][closest_key_point_index * 2],
+                    original_court_key_points[frame_num][
+                        closest_key_point_index * 2 + 1
+                    ],
                 )
 
                 # Get Player height in pixels
@@ -358,11 +391,46 @@ class MiniMap:
                 if closest_player_id_to_ball == player_id:
                     # Get The closest keypoint in pixels
                     closest_key_point_index = get_closest_keypoint_index(
-                        ball_position, original_court_key_points, [0, 2, 12, 13]
+                        ball_position,
+                        original_court_key_points[frame_num],
+                        [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            13,
+                            14,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            24,
+                            25,
+                            26,
+                            27,
+                        ],
                     )
                     closest_key_point = (
-                        original_court_key_points[closest_key_point_index * 2],
-                        original_court_key_points[closest_key_point_index * 2 + 1],
+                        original_court_key_points[frame_num][
+                            closest_key_point_index * 2
+                        ],
+                        original_court_key_points[frame_num][
+                            closest_key_point_index * 2 + 1
+                        ],
                     )
 
                     mini_court_player_position = self.get_mini_court_coordinates(

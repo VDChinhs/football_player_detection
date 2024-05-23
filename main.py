@@ -9,10 +9,19 @@ def main():
     print("Start")
 
     # Read Video
-    input_video_path = "input_videos/ManCity-Bayer.mp4"
+    keyword = "women"
+
+    input_video_path = f"input_videos/{keyword}.mp4"
+    # stub_path_tracker = f"tracker_stubs/test_man.pkl"
+    # stub_path_yard = f"tracker_stubs/test_yard_man.pkl"
+    # output_video_path = f"output_videos/test_man.avi"
+    stub_path_tracker = f"tracker_stubs/PJ_tracker_{keyword}.pkl"
+    stub_path_yard = f"tracker_stubs/PJ_yard_{keyword}.pkl"
+    output_video_path = f"output_videos/test_{keyword}.avi"
+
     video_frames = read_video(input_video_path)
 
-    # Detect Players and Ball
+    # Detection Players and Ball
     print("Detection....")
     tracker = PlayerTracker(model_path="models/YOLOv8xEp50.pt")
     yard_tracker = YardTracker(model_path="models/keypoint_yard_best.pt")
@@ -20,7 +29,7 @@ def main():
     tracker_detections = tracker.get_object_tracks(
         video_frames["video_frame"],
         read_from_stub=True,
-        stub_path="tracker_stubs/test_man.pkl",
+        stub_path=stub_path_tracker,
     )
     tracker_detections["ball"] = tracker.interpolate_ball_positions(
         tracker_detections["ball"]
@@ -29,8 +38,10 @@ def main():
     yard_detections = yard_tracker.detect_frames(
         video_frames["video_frame"],
         read_from_stub=True,
-        stub_path="tracker_stubs/test_yard_man.pkl",
+        stub_path=stub_path_yard,
     )
+    yard_detections = yard_tracker.clean_data(yard_detections)
+    center_yard = yard_tracker.get_center_point_yard_frames(yard_detections)
 
     # Assign Player Teams
     team_assigner = TeamAssigner()
@@ -48,71 +59,12 @@ def main():
                 team_assigner.team_colors[team]
             )
 
-    yard_custom = [
-        1550,
-        70,
-        1850,
-        70,
-        1550,
-        510.0,
-        1850,
-        510.0,
-        1620.0,
-        70,
-        1780.0,
-        70,
-        1620.0,
-        510.0,
-        1780.0,
-        510.0,
-        1664.0,
-        70,
-        1736.0,
-        70,
-        1664.0,
-        510.0,
-        1736.0,
-        510.0,
-        1620.0,
-        136.0,
-        1780.0,
-        136.0,
-        1620.0,
-        444.0,
-        1780.0,
-        444.0,
-        1664.0,
-        92.0,
-        1736.0,
-        92.0,
-        1664.0,
-        488.0,
-        1736.0,
-        488.0,
-        1550,
-        290.0,
-        1850,
-        290.0,
-        487.0,
-        494.0,
-        1122.0,
-        489.0,
-        619.0,
-        236.0,
-        992.0,
-        234.0,
-        1668.0,
-        444.0,
-        1732.0,
-        444.0,
-    ]
-
     mini_map = MiniMap(video_frames["video_frame"][0])
 
     # Convert position to minimap
     player_mini_map_dectection, ball_mini_map_dectection = (
         mini_map.convert_bounding_boxes_to_mini_court_coordinates(
-            tracker_detections["players"], tracker_detections["ball"], yard_custom
+            tracker_detections["players"], tracker_detections["ball"], center_yard
         )
     )
 
@@ -154,9 +106,8 @@ def main():
         )
 
     # Save Video
-    save_video(output_video_frames, "output_videos/test_man.avi")
+    save_video(output_video_frames, output_video_path)
     print("Finish...")
-
 
 if __name__ == "__main__":
     main()
