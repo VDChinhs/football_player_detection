@@ -1,7 +1,6 @@
 import cv2
 import sys
-
-sys.path.append("../")
+from sklearn.metrics import mean_squared_error
 import constants
 import numpy as np
 from utils import (
@@ -14,6 +13,7 @@ from utils import (
     get_height_of_bbox,
     measure_xy_distance,
 )
+sys.path.append("../")
 
 
 class MiniMap:
@@ -314,11 +314,16 @@ class MiniMap:
         output_ball_boxes = []
 
         for frame_num, player_bbox in enumerate(player_boxes):
+            output_player_bboxes_dict = []
+            output_ball_bboxes_dict = []
+
             ball_box = ball_boxes[frame_num][1]
             ball_position = get_center_of_bbox(ball_box)
 
-            output_player_bboxes_dict = {}
             for player_id, info in player_bbox.items():
+                player_obj = {}
+                ball_obj = {}
+                
                 foot_position = get_foot_position(info["bbox"])
                 closest_player_id_to_ball = min(
                     player_bbox.keys(),
@@ -386,7 +391,9 @@ class MiniMap:
                     constants.PLAYER_HIGHT,
                 )
 
-                output_player_bboxes_dict[player_id] = mini_court_player_position
+                player_obj['position'] = mini_court_player_position
+                player_obj['color'] = info['team_color']
+                output_player_bboxes_dict.append(player_obj)
 
                 if closest_player_id_to_ball == player_id:
                     # Get The closest keypoint in pixels
@@ -440,16 +447,86 @@ class MiniMap:
                         max_player_height_in_pixels,
                         constants.PLAYER_HIGHT,
                     )
-                    output_ball_boxes.append({1: mini_court_player_position})
-            output_player_boxes.append(output_player_bboxes_dict)
+                    ball_obj['position'] = mini_court_player_position
+                    ball_obj['color'] = (0, 255, 255)
+                    output_ball_bboxes_dict.append(ball_obj)
 
+                    # output_ball_boxes.append({1: mini_court_player_position})
+                output_player_boxes.append(output_player_bboxes_dict)
+                output_ball_boxes.append(output_ball_bboxes_dict)
         return output_player_boxes, output_ball_boxes
 
-    def draw_points_on_mini_court(self, frames, postions, color=(0, 255, 0)):
+    def draw_points_on_mini_court(self, frames, postions):
         for frame_num, frame in enumerate(frames):
-            for _, position in postions[frame_num].items():
-                x, y = position
+            for info in postions[frame_num]:
+                x, y = info['position']
                 x = int(x)
                 y = int(y)
-                cv2.circle(frame, (x, y), 5, color, -1)
+                cv2.circle(frame, (x, y), 5, info['color'], -1)
         return frames
+    
+
+    def homography_matrix(self, player_boxes, ball_boxes, original_court_key_points):
+        pred_dst_pts = []                                                           
+        pred_dst_pos = []                                                           
+
+        for frame_num, player_bbox in enumerate(player_boxes):
+
+            detected_labels = list(map(lambda x: int(x['cls']), original_court_key_points[frame_num].values())) # Nhãn chữ keypoint
+            detected_labels_src_pts = np.array([get_center_of_bbox(obj['bbox']) for obj in original_court_key_points[frame_num].values()]) #Tâm keypoint
+            detected_labels_dst_pts = np.array([[self.drawing_key_points[a*2], self.drawing_key_points[a*2+1]] for a in detected_labels]) #Vị trí các điểm trên minimap
+
+            if len(detected_labels) > 3:
+                    if frame_num + 1 > 1:
+                        common_labels = set(detected_labels_prev) & set(detected_labels)
+                        if len(common_labels) > 3:
+                            common_label_idx_prev = [detected_labels_prev.index(i) for i in common_labels]   
+                            common_label_idx_curr = [detected_labels.index(i) for i in common_labels]        
+                            coor_common_label_prev = detected_labels_src_pts_prev[common_label_idx_prev]     
+                            coor_common_label_curr = detected_labels_src_pts[common_label_idx_curr]          
+                            coor_error = mean_squared_error(coor_common_label_prev, coor_common_label_curr)  
+                            update_homography = coor_error > 5                                         
+                        else:
+                            update_homography = True                                                         
+                    else:
+                        update_homography = True
+
+                    if  update_homography:
+                        homog, mask = cv2.findHomography(detected_labels_src_pts,                   
+                                                    detected_labels_dst_pts)                  
+            if 'homog' in locals():
+                detected_labels_prev = detected_labels.copy()                               
+                detected_labels_src_pts_prev = detected_labels_src_pts.copy()    
+
+                bboxes_p_c_0 = np.array([obj['bbox']for obj in player_bbox.values()])  
+                bboxes_p_c_0_color = np.array([obj['team_color']for obj in player_bbox.values()])  
+                bboxes_p_c_2 = np.array([ball_boxes[frame_num][1]]) 
+                                    
+                detected_ppos_src_pts = bboxes_p_c_0[:,:2]  + np.array([[0]*bboxes_p_c_0.shape[0], bboxes_p_c_0[:,3]/2]).transpose()
+                detected_ball_src_pos = bboxes_p_c_2[0,:2] if bboxes_p_c_2.shape[0]>0 else None
+
+                pred_dst_pts_player = []
+                for nb,pt in enumerate(detected_ppos_src_pts):    
+                    player_obj = {}                                      
+                    pt = np.append(np.array(pt), np.array([1]), axis=0)                     
+                    dest_point = np.matmul(homog, np.transpose(pt))                              
+                    dest_point = dest_point/dest_point[2]   
+                    player_obj['position'] = tuple(np.transpose(dest_point)[:2])                   
+                    player_obj['color'] = bboxes_p_c_0_color[nb]                   
+                    pred_dst_pts_player.append(player_obj)  
+                pred_dst_pts.append(pred_dst_pts_player)
+                
+                pred_dst_pts_ball = []
+                if detected_ball_src_pos is not None:
+                    ball_obj = {}                                      
+                    pt = np.append(np.array(detected_ball_src_pos), np.array([1]), axis=0)
+                    dest_point = np.matmul(homog, np.transpose(pt))
+                    dest_point = dest_point/dest_point[2]
+                    ball_obj['position'] = tuple(np.transpose(dest_point)[:2])                   
+                    ball_obj['color'] = (0, 255, 255)
+                    pred_dst_pts_ball.append(ball_obj)
+                pred_dst_pos.append(pred_dst_pts_ball)
+
+                
+        return pred_dst_pts, pred_dst_pos 
+ 

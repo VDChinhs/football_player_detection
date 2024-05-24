@@ -6,7 +6,7 @@ from mini_map import MiniMap
 
 
 def main():
-    print("Start")
+    print("Read Video...")
 
     # Read Video
     keyword = "women"
@@ -22,9 +22,10 @@ def main():
     video_frames = read_video(input_video_path)
 
     # Detection Players and Ball
-    print("Detection....")
+    print("Detection Players, Ball and Keypoint Yard...")
     tracker = PlayerTracker(model_path="models/YOLOv8xEp50.pt")
     yard_tracker = YardTracker(model_path="models/keypoint_yard_best.pt")
+    mini_map = MiniMap(video_frames["video_frame"][0])
 
     tracker_detections = tracker.get_object_tracks(
         video_frames["video_frame"],
@@ -41,14 +42,13 @@ def main():
         stub_path=stub_path_yard,
     )
     yard_detections = yard_tracker.clean_data(yard_detections)
-    center_yard = yard_tracker.get_center_point_yard_frames(yard_detections)
 
     # Assign Player Teams
+    print('Assign player teams...')
     team_assigner = TeamAssigner()
     team_assigner.assign_team_color(
         video_frames["video_frame"][0], tracker_detections["players"][0]
     )
-
     for frame_num, player_track in enumerate(tracker_detections["players"]):
         for player_id, track in player_track.items():
             team = team_assigner.get_player_team(
@@ -59,14 +59,15 @@ def main():
                 team_assigner.team_colors[team]
             )
 
-    mini_map = MiniMap(video_frames["video_frame"][0])
-
     # Convert position to minimap
-    player_mini_map_dectection, ball_mini_map_dectection = (
-        mini_map.convert_bounding_boxes_to_mini_court_coordinates(
-            tracker_detections["players"], tracker_detections["ball"], center_yard
-        )
-    )
+    print('Convert position to minimap...')
+    # player_mini_map_dectection, ball_mini_map_dectection = (
+    #     mini_map.convert_bounding_boxes_to_mini_court_coordinates(
+    #         tracker_detections["players"], tracker_detections["ball"], center_yard
+    #     )
+    # )
+    player_mini_map_dectection, ball_mini_map_dectection = mini_map.homography_matrix(tracker_detections["players"], tracker_detections["ball"], yard_detections)
+
 
     print("DrawBboxes...")
     output_video_frames = tracker.draw_bboxes(
@@ -74,15 +75,15 @@ def main():
     )
     output_video_frames = yard_tracker.draw_bboxes(output_video_frames, yard_detections)
 
+    print("MiniMap...")
+    output_video_frames = mini_map.draw_mini_court(output_video_frames)
+
     output_video_frames = mini_map.draw_points_on_mini_court(
         output_video_frames, player_mini_map_dectection
     )
     output_video_frames = mini_map.draw_points_on_mini_court(
-        output_video_frames, ball_mini_map_dectection, color=(0, 255, 255)
+        output_video_frames, ball_mini_map_dectection
     )
-
-    # Draw MiniMap
-    output_video_frames = mini_map.draw_mini_court(output_video_frames)
 
     # Frame number
     for i, frame in enumerate(output_video_frames):
