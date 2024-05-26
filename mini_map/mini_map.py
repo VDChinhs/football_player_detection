@@ -468,8 +468,8 @@ class MiniMap:
 
     def homography_matrix(self, player_boxes, ball_boxes, original_court_key_points):
         pred_dst_pts = []                                                           
-        pred_dst_pos = []                                                           
-
+        pred_dst_pos = []      
+        index = 0                                                   
         for frame_num, player_bbox in enumerate(player_boxes):
 
             detected_labels = list(map(lambda x: int(x['cls']), original_court_key_points[frame_num].values())) # Nhãn chữ keypoint
@@ -513,7 +513,13 @@ class MiniMap:
                     dest_point = dest_point/dest_point[2]   
                     player_obj['position'] = tuple(np.transpose(dest_point)[:2])                   
                     player_obj['color'] = bboxes_p_c_0_color[nb]                   
-                    pred_dst_pts_player.append(player_obj)  
+                    pred_dst_pts_player.append(player_obj) 
+                # while frame_num == 69 and index == 0:
+                #     height, width, channels = video.shape
+                #     img1_warped = cv2.warpPerspective(video, homog, (width, height))
+                #     img1_warped = self.draw_points_on_mini_court([img1_warped], [pred_dst_pts_player])
+                #     cv2.imwrite(f'output_videos/hog1.jpg',img1_warped[0])
+                #     index = index + 1 
                 pred_dst_pts.append(pred_dst_pts_player)
                 
                 pred_dst_pts_ball = []
