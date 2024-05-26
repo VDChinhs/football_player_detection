@@ -9,15 +9,15 @@ def main():
     print("Read Video...")
 
     # Read Video
-    keyword = "women"
+    keyword = "ManCity-Bayer"
 
     input_video_path = f"input_videos/{keyword}.mp4"
-    # stub_path_tracker = f"tracker_stubs/test_man.pkl"
-    # stub_path_yard = f"tracker_stubs/test_yard_man.pkl"
-    # output_video_path = f"output_videos/test_man.avi"
-    stub_path_tracker = f"tracker_stubs/PJ_tracker_{keyword}.pkl"
-    stub_path_yard = f"tracker_stubs/PJ_yard_{keyword}.pkl"
-    output_video_path = f"output_videos/test_{keyword}.avi"
+    stub_path_tracker = f"tracker_stubs/test_man.pkl"
+    stub_path_yard = f"tracker_stubs/test_yard_man.pkl"
+    output_video_path = f"output_videos/test_man.avi"
+    # stub_path_tracker = f"tracker_stubs/PJ_tracker_{keyword}.pkl"
+    # stub_path_yard = f"tracker_stubs/PJ_yard_{keyword}.pkl"
+    # output_video_path = f"output_videos/test_{keyword}.avi"
 
     video_frames = read_video(input_video_path)
 
@@ -35,6 +35,14 @@ def main():
     tracker_detections["ball"] = tracker.interpolate_ball_positions(
         tracker_detections["ball"]
     )
+
+    # Cắt ảnh player frame thứ bao nhiêu
+    # framr_crop = 48
+    # for trackid, player in tracker_detections['players'][framr_crop].items():
+    #     bbox = player['bbox']
+    #     frame = video_frames["video_frame"][framr_crop]
+    #     crop = frame[ int(bbox[1]):int(bbox[3]), int(bbox[0]):int(bbox[2])]
+    #     cv2.imwrite(f'output_videos/players/player_{trackid}.jpg',crop)
 
     yard_detections = yard_tracker.detect_frames(
         video_frames["video_frame"],
