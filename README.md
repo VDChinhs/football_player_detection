@@ -4,8 +4,9 @@ Model sử dụng cho nhận diện player: Yolov8, KMeans, Homography Matrix
 
 # Ứng dụng có các chức năng
 - Detection ball, player, referee, goalkeeper
-- Detection keypoint yard (coming soon)
-- Show mini map (coming soon)
+- Phân cầu thủ 2 bên
+- Detection keypoint yard
+- Show mini map
 
 # Yêu cầu thư viện
 - ultralytics
